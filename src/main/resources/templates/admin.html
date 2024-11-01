@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Table</title>
+</head>
+<body>
+<h1> User Table </h1>
+<h3>
+    <button onclick="window.location.href = 'admin/add';">Add new user</button>
+</h3>
+<h3>
+    <table border="1" style="width:600px" th:height="200px" >
+        <thead>
+        <tr>
+            <th> Id </th>
+            <th> Name </th>
+            <th> LastName </th>
+            <th> Age </th>
+
+            <th> Role </th>
+            <th> Action </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:block th:each="us : ${users}" align="center">
+            <td th:text="${us.getId()}"></td>
+            <td th:text="${us.getName()}"></td>
+            <td th:text="${us.getLastName()}"></td>
+            <td th:text="${us.getAge()}"></td>
+
+            <td th:text="${us.getAuthorities()}"></td>
+            <td>
+                <a th:href="@{'admin/edit?id=' + ${us.getId()}}">edit</a>
+                <a th:href="@{'admin/delete?id=' + ${us.getId()}}">delete</a>
+            </td>
+        </tr >
+        </tbody>
+    </table>
+</h3>
+<h2>
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Logout"/>
+    </h2>
+</form>
+</body>
+</html>
