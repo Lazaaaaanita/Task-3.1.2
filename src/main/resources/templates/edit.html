@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+</head>
+<body>
+<h1> Edit User </h1>
+<form action="#" th:method="PATCH" th:action="edit" th:object="${user}">
+    <h3>
+        <table>
+            <tbody>
+                    <input readonly type="hidden" th:field="*{id}"/>
+            <tr>
+                <td>
+                    <label for="name">Enter name</label>
+                    <input type="text" th:field="*{name}" id="name" required/>
+                    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="lastName">Enter lastName</label>
+                    <input type="text" th:field="*{lastName}" id="lastName"/>
+                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName error</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="age">Enter age</label>
+                    <input type="number" min="0" max="127" th:field="*{age}" id="age">
+                    <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">age error</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>Select Roles:</h3>
+                    <div th:each="role : ${roles}">
+                        <input type="checkbox" th:field="*{roles}" th:value="${role.id}" th:text="${role.roleName.replace('ROLE_','')}"/>
+                    </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="password">Enter password</label>
+                    <input type="text" th:field="*{password}" id="password"/>
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" class="buttonEdit" value="Edit user"/>
+                </td>
+            </tr>
+
+        </table>
+    </h3>
+</body>
+</html>

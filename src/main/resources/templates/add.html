@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add User</title>
+</head>
+<body>
+<h1> Add User </h1>
+<form  th:method="POST" th:action="@{/admin/add}" th:object="${user}">
+    <h3>
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <label for="name">Enter name</label>
+                    <input type="text" th:field="*{name}" id="name" required/>
+                    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="lastName">Enter lastname</label>
+                    <input type="text" th:field="*{lastName}" id="lastName"/>
+                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName error</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="age">Enter age</label>
+                    <input type="number" min="0" max="127" th:field="*{age}" id="age">
+                    <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">age error</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="password">Enter password</label>
+                    <input type="text" th:field="*{password}" id="password"/>
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
+                </td>
+            </tr>
+            <tr>
+            <td>
+                <label>Select role</label>
+                <div th:each="role : ${roles}">
+                    <input type="checkbox" th:field="*{roles}" th:value="${role.id}" th:text="${role.roleName.replace('ROLE_','')}"/>
+                </div>
+            </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit">Save user</button>
+                </td>
+            </tr>
+        </table>
+    </h3>
+</body>
+</html>
