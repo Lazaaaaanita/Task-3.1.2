@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class Role implements GrantedAuthority {
     private Long id;
 
     @Column
+    @NotEmpty(message = "Role is empty")
     private String roleName;
 
     public Role() {
@@ -54,4 +56,10 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
+    @Override
+    public String toString(){
+        return getRoleName();
+    }
+
 }
+

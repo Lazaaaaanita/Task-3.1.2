@@ -8,10 +8,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -23,29 +23,34 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name="name")
+    @NotEmpty(message = "Name should be not empty")
+    @Size(min=2,max=30, message = "Name should be between 2 and 30 symbols")
     private String name;
 
     @Column(name="lastName")
+    @NotEmpty(message = "Lastname should be not empty")
+    @Size(min=2,max=30, message = "Lastname should be between 2 and 30 symbols")
     private String lastName;
 
     @Column(name="age")
+    @Min(value = 0, message = "Age must be greater than 0")
     private int age;
 
     @Column(name="password")
+    @NotEmpty(message = "Password should be not empty")
     private String password;
 
     @ManyToMany(cascade={ CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable (
             name = "user_role",
             joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="role_id")
-    )
+            inverseJoinColumns = @JoinColumn(name="role_id"))
     private Set<Role> roles= new HashSet<>();
 
     public User() {
     }
 
-    public User(String name, String lastName, int age, String password, Set<Role> roles) {
+    public User( String name, String lastName, int age, String password, Set<Role> roles) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
