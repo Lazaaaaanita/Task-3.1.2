@@ -1,6 +1,6 @@
 package ru.itmentor.spring.boot_security.demo.configs;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -11,21 +11,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
-import ru.itmentor.spring.boot_security.demo.service.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
 
     private final SuccessUserHandler successUserHandler;
     private final UserService userService;
@@ -38,7 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic()
+                .and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers( "/","/index").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
@@ -49,10 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .deleteCookies("JSESSIONID")
                 .logoutUrl("/logout")
-                .permitAll();
-
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
     }
 
     @Bean
@@ -67,4 +61,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    ModelMapper modelMapper(){return new ModelMapper();}
+
 }
